@@ -1601,12 +1601,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .ticker-set { gap: 38px; padding: 24px 38px 24px 0; }
 .ticker .ticker-set > .ticker-item { display: flex; gap: 13px; align-items: center; white-space: nowrap; font-size: 13px; font-weight: 650; }
 .ticker .ticker-item::before { content: '✦'; color: var(--ticker-accent); margin: 0; }
-.ticker:hover .ticker-track, .ticker:focus-within .ticker-track, .ticker[data-paused="true"] .ticker-track { animation-play-state: paused; }
-.ticker-toggle { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 44px; height: 44px; padding: 10px; background: var(--ticker-bg); color: var(--ticker-ink); border: 1px solid #ffffff40; border-radius: 10px; }
-.ticker-toggle svg { display: block; width: 20px; height: 20px; }
-.ticker-toggle .play-icon { display: none; }
-.ticker[data-paused="true"] .pause-icon { display: none; }
-.ticker[data-paused="true"] .play-icon { display: block; }
 @keyframes ticker-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 @media (max-width: 980px) {
     .header { height: 72px; display: grid; grid-template-columns: auto minmax(0,1fr) auto auto auto; gap: 8px; align-items: center; }
@@ -1643,6 +1637,49 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     .ticker .ticker-item { white-space: normal; }
 }
 
+    /* Авторские логотипы заведений вместо фотографий в обложках. */
+.restaurant-brand-panel { position: relative; display: grid; place-items: center; width: 100%; min-height: 235px; overflow: hidden; color: var(--brand-color); background: var(--brand-background); }
+.restaurant-brand-panel::before { content:''; position:absolute; inset:12px; border:1px solid currentColor; border-radius:14px; opacity:.18; pointer-events:none; }
+.restaurant-brand-panel::after { content:''; position:absolute; width:240px; height:240px; border:1px solid currentColor; border-radius:50%; right:-160px; top:-130px; box-shadow:0 0 0 30px var(--brand-background),0 0 0 31px currentColor; opacity:.14; pointer-events:none; }
+.brand-lockup { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:25px 20px; text-align:center; }
+.brand-symbol { width:72px; height:72px; margin-bottom:10px; }
+.brand-wordmark { font-size:24px; font-weight:800; line-height:1.07; letter-spacing:1.2px; }
+.brand-wordmark span { display:block; }
+.brand-caption { margin-top:13px; font-size:10px; text-transform:uppercase; font-weight:650; letter-spacing:2px; }
+.restaurant-photo .delivery-chip { z-index:1; bottom:12px; left:12px; font-size:11px; padding:5px 9px; }
+.restaurant-brand-hero { min-height:420px; height:100%; }
+.restaurant-brand-hero .brand-symbol { width:112px; height:112px; margin-bottom:20px; }
+.restaurant-brand-hero .brand-wordmark { font-size:clamp(30px,3.3vw,46px); }
+.restaurant-brand-hero .brand-caption { font-size:12px; }
+.restaurant-brand-hero::before { inset:22px; }
+.restaurant-cover-frame { display:flex; }
+@media (min-width:981px) { nav { background:transparent; } }
+@media (max-width:700px) {
+    .restaurant-brand-panel { min-height:245px; }
+    .restaurant-brand-hero { min-height:280px; }
+    .restaurant-brand-hero .brand-symbol { width:90px; height:90px; }
+    .restaurant-brand-hero .brand-wordmark { font-size:31px; }
+}
+
+/* Полноширинная лента без пауз и свободной области справа. */
+.ticker-viewport { margin:0; width:100%; overflow:hidden; }
+.promo-track { display:flex; width:max-content; transform:translateX(-50%); will-change:transform; }
+.is-ready .promo-track { animation:promo-right var(--promo-duration,160s) linear infinite; }
+.promo-group, .promo-set { display:flex; flex:none; align-items:center; width:max-content; }
+.promo-set { gap:38px; padding:23px 38px 23px 0; }
+.ticker .promo-set > .promo-item { display:flex; align-items:center; gap:14px; white-space:nowrap; font-size:13px; font-weight:650; letter-spacing:.1px; }
+.ticker .promo-item::before { content:'✦'; display:inline-block; color:var(--ticker-accent); margin:0; }
+@keyframes promo-right { from { transform:translateX(-50%); } to { transform:translateX(0); } }
+@media(max-width:680px) { .promo-set { padding-block:20px; gap:28px; } .ticker .promo-set > .promo-item { font-size:12px; } }
+@media(prefers-reduced-motion:reduce) {
+    .is-ready .promo-track { animation:none!important; }
+    .promo-track { transform:none; width:100%; will-change:auto; }
+    .promo-group { width:100%; }
+    .promo-group + .promo-group, .promo-set + .promo-set { display:none; }
+    .promo-set { width:100%; padding:20px 16px; flex-wrap:wrap; justify-content:center; gap:12px 25px; }
+    .ticker .promo-set > .promo-item { white-space:normal; }
+}
+
     </style>
 </head>
 
@@ -1650,14 +1687,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <a class="skip" href="#catalog">Перейти к ресторанам</a>
     <header>
         <div class="wrap header"><a class="logo" href="#home"
-                aria-label="СКОРО, на главную">СКОРО<span>↗</span></a><label class="city"><svg class="map-pin" aria-hidden="true" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><select id="city" aria-label="Город доставки">
+                aria-label="СКОРО, на главную">СКОРО</a><label class="city"><svg class="map-pin" aria-hidden="true" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><select id="city" aria-label="Город доставки">
                     <option>Москва</option>
                     <option>Санкт-Петербург</option>
                     <option>Казань</option>
                     <option>Екатеринбург</option>
                 </select></label>
-            <nav id="nav" aria-label="Основная навигация"><a href="#catalog">Рестораны</a><a href="#benefits">Почему мы</a><a
-                    href="#reviews">Отзывы</a><a href="#contacts">Контакты</a></nav><button class="btn cart-open"
+            <nav id="nav" aria-label="Основная навигация"><a href="#catalog">Рестораны</a><a href="#benefits">Почему мы</a><a href="#contacts">Контакты</a></nav><button class="btn cart-open"
                 id="open-cart" aria-haspopup="dialog"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24"
                     fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 3h2l3 12h10l3-9H6" />
@@ -1687,14 +1723,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
                 </div>
             </div>
         </section>
-        <div class="ticker" id="promo-ticker" data-paused="false" role="region" aria-label="Преимущества доставки">
-            <p class="sr-only">Готовим после заказа. Бережно доставляем. Вкус на каждый день. Заказать в пару кликов.</p>
-            <div class="ticker-viewport"><div class="ticker-track" aria-hidden="true"><div class="ticker-group"><div class="ticker-set"><span class="ticker-item">Готовим после заказа</span><span class="ticker-item">Бережно доставляем</span><span class="ticker-item">Вкус на каждый день</span><span class="ticker-item">Заказать в пару кликов</span></div><div class="ticker-set"><span class="ticker-item">Готовим после заказа</span><span class="ticker-item">Бережно доставляем</span><span class="ticker-item">Вкус на каждый день</span><span class="ticker-item">Заказать в пару кликов</span></div><div class="ticker-set"><span class="ticker-item">Готовим после заказа</span><span class="ticker-item">Бережно доставляем</span><span class="ticker-item">Вкус на каждый день</span><span class="ticker-item">Заказать в пару кликов</span></div></div><div class="ticker-group"><div class="ticker-set"><span class="ticker-item">Готовим после заказа</span><span class="ticker-item">Бережно доставляем</span><span class="ticker-item">Вкус на каждый день</span><span class="ticker-item">Заказать в пару кликов</span></div><div class="ticker-set"><span class="ticker-item">Готовим после заказа</span><span class="ticker-item">Бережно доставляем</span><span class="ticker-item">Вкус на каждый день</span><span class="ticker-item">Заказать в пару кликов</span></div><div class="ticker-set"><span class="ticker-item">Готовим после заказа</span><span class="ticker-item">Бережно доставляем</span><span class="ticker-item">Вкус на каждый день</span><span class="ticker-item">Заказать в пару кликов</span></div></div></div></div>
-            <button type="button" class="ticker-toggle" id="ticker-toggle" aria-label="Приостановить рекламную ленту" aria-pressed="false" title="Приостановить рекламную ленту">
-                <svg class="pause-icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-                <svg class="play-icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="m7 4 13 8-13 8Z"/></svg>
-            </button>
-        </div>
+        <div class="ticker" id="promo-ticker" role="region" aria-label="Преимущества доставки"><p class="sr-only">Готовим после заказа. Бережно доставляем. Вкус на каждый день. Заказать в пару кликов. Шесть кухонь — один вкусный вечер. Пицца, роллы или что-то новое?. Для себя и целой компании. Твой перерыв на вкусное. Любимые рестораны рядом. Сегодня пробуем новое. Маленький праздник за большим столом. Хорошая еда. Хороший день..</p><div class="ticker-viewport"><div class="promo-track" aria-hidden="true"><div class="promo-group"><div class="promo-set"><span class="promo-item">Готовим после заказа</span><span class="promo-item">Бережно доставляем</span><span class="promo-item">Вкус на каждый день</span><span class="promo-item">Заказать в пару кликов</span><span class="promo-item">Шесть кухонь — один вкусный вечер</span><span class="promo-item">Пицца, роллы или что-то новое?</span><span class="promo-item">Для себя и целой компании</span><span class="promo-item">Твой перерыв на вкусное</span><span class="promo-item">Любимые рестораны рядом</span><span class="promo-item">Сегодня пробуем новое</span><span class="promo-item">Маленький праздник за большим столом</span><span class="promo-item">Хорошая еда. Хороший день.</span></div><div class="promo-set"><span class="promo-item">Готовим после заказа</span><span class="promo-item">Бережно доставляем</span><span class="promo-item">Вкус на каждый день</span><span class="promo-item">Заказать в пару кликов</span><span class="promo-item">Шесть кухонь — один вкусный вечер</span><span class="promo-item">Пицца, роллы или что-то новое?</span><span class="promo-item">Для себя и целой компании</span><span class="promo-item">Твой перерыв на вкусное</span><span class="promo-item">Любимые рестораны рядом</span><span class="promo-item">Сегодня пробуем новое</span><span class="promo-item">Маленький праздник за большим столом</span><span class="promo-item">Хорошая еда. Хороший день.</span></div></div><div class="promo-group"><div class="promo-set"><span class="promo-item">Готовим после заказа</span><span class="promo-item">Бережно доставляем</span><span class="promo-item">Вкус на каждый день</span><span class="promo-item">Заказать в пару кликов</span><span class="promo-item">Шесть кухонь — один вкусный вечер</span><span class="promo-item">Пицца, роллы или что-то новое?</span><span class="promo-item">Для себя и целой компании</span><span class="promo-item">Твой перерыв на вкусное</span><span class="promo-item">Любимые рестораны рядом</span><span class="promo-item">Сегодня пробуем новое</span><span class="promo-item">Маленький праздник за большим столом</span><span class="promo-item">Хорошая еда. Хороший день.</span></div><div class="promo-set"><span class="promo-item">Готовим после заказа</span><span class="promo-item">Бережно доставляем</span><span class="promo-item">Вкус на каждый день</span><span class="promo-item">Заказать в пару кликов</span><span class="promo-item">Шесть кухонь — один вкусный вечер</span><span class="promo-item">Пицца, роллы или что-то новое?</span><span class="promo-item">Для себя и целой компании</span><span class="promo-item">Твой перерыв на вкусное</span><span class="promo-item">Любимые рестораны рядом</span><span class="promo-item">Сегодня пробуем новое</span><span class="promo-item">Маленький праздник за большим столом</span><span class="promo-item">Хорошая еда. Хороший день.</span></div></div></div></div></div>
         <section id="catalog">
             <div class="wrap">
                 <div class="section-top"><div><div class="eyebrow">Твой город. Твои вкусы.</div><h2>Рестораны рядом</h2></div>
@@ -1755,30 +1784,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
                 </div>
             </div>
         </section>
-        <section class="reviews" id="reviews">
-            <div class="wrap">
-                <div class="eyebrow">За хорошим обедом — хорошие истории</div>
-                <h2>Вкусно быть вместе.</h2>
-                <p class="muted">Примеры отзывов для демонстрации сайта.</p>
-                <div class="grid">
-                    <blockquote class="review">
-                        <div class="stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                        <p>«Пицца, сериал и никаких планов на вечер. Именно такой ужин я и хотела!»</p>
-                        <footer>Аня<span>Демонстрационный отзыв</span></footer>
-                    </blockquote>
-                    <blockquote class="review">
-                        <div class="stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                        <p>«Удобно, что можно быстро найти блюдо и сразу посмотреть стоимость всего заказа.»</p>
-                        <footer>Михаил<span>Демонстрационный отзыв</span></footer>
-                    </blockquote>
-                    <blockquote class="review">
-                        <div class="stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                        <p>«Боул для меня, бургер для него. Наконец-то не нужно спорить, что заказать.»</p>
-                        <footer>Даша<span>Демонстрационный отзыв</span></footer>
-                    </blockquote>
-                </div>
-            </div>
-        </section>
+        
         <section class="cta">
             <div class="wrap cta-inner">
                 <div>
@@ -1792,7 +1798,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <footer class="footer" id="contacts">
         <div class="wrap">
             <div class="footer-top">
-                <div><a class="logo" href="#home">СКОРО↗</a>
+                <div><a class="logo" href="#home">СКОРО</a>
                     <p>Еда под твоё настроение.</p>
                 </div>
                 <div><strong>Напишите нам</strong>
@@ -2349,7 +2355,7 @@ function notify(message) {
 
 function restaurantCard(r) {
     return `<article class="restaurant-card"><a href="#/restaurant/${r.id}" class="restaurant-link" aria-label="Открыть меню ресторана ${escapeHTML(r.name)}">
-        <div class="restaurant-photo"><img src="${imageAssets[r.cover]}" alt="${escapeHTML(r.cuisine)}" width="600" height="360" loading="lazy" decoding="async"><span class="delivery-chip">◷ ${r.time}</span></div>
+        <div class="restaurant-photo">${restaurantLogo(r)}<span class="delivery-chip">◷ ${r.time}</span></div>
         <div class="restaurant-body"><div class="restaurant-title"><h3>${escapeHTML(r.name)}</h3><span class="rating"><span aria-hidden="true">★</span> ${r.rating}</span></div>
         <p>${r.cuisine}</p><div class="restaurant-meta"><span>${r.reviews} демоотзывов</span><span>Средний чек ${money(r.average)}</span></div><div class="restaurant-action">Посмотреть меню <span aria-hidden="true">↗</span></div></div>
     </a></article>`;
@@ -2378,7 +2384,7 @@ function renderRestaurant(r) {
     $('restaurant-page').innerHTML = `<div class="wrap"><a class="back-link" href="#catalog">← Все рестораны</a>
         <div class="restaurant-hero"><div class="restaurant-intro"><span class="eyebrow">${r.accent}</span><h1 id="restaurant-heading" tabindex="-1">${escapeHTML(r.name)}</h1><p class="cuisine-label">${r.cuisine}</p><p class="restaurant-description">${r.description}</p>
         <div class="restaurant-facts"><a class="fact" href="#/restaurant/${r.id}/reviews"><strong>★ ${r.rating}</strong><span>${r.reviews} демоотзывов</span></a><div class="fact"><strong>${r.time}</strong><span>Доставка · пример</span></div><div class="fact"><strong>${money(r.average)}</strong><span>Средний чек</span></div></div><p class="demo">Вымышленный ресторан. Оценки, отзывы, цены и время доставки — тестовые данные.</p></div>
-        <div class="restaurant-cover-frame"><img class="restaurant-cover" src="${imageAssets[r.cover]}" alt="${r.cuisine}" width="760" height="540" fetchpriority="high"></div></div>
+        <div class="restaurant-cover-frame">${restaurantLogo(r, true)}</div></div>
         <div class="menu-heading"><div><span class="eyebrow">Что-то очень вкусное</span><h2>Меню ресторана</h2></div><span class="muted">6 блюд · <span data-selected-city>${escapeHTML($('city').value)}</span></span></div>
         <div class="grid menu-grid" id="restaurant-menu">${renderMenu(r)}</div><p class="demo">Фотографии иллюстрируют блюда и могут отличаться от состава и подачи в демонстрационном меню.</p>
         <section class="restaurant-reviews" id="restaurant-reviews"><div class="menu-heading"><h2>Примеры отзывов</h2><span class="demo">Все отзывы вымышлены</span></div><div class="restaurant-review-grid">${r.quotes.map(([name, quote]) => `<blockquote class="review"><div class="stars" aria-label="Пример оценки: пять звёзд">★★★★★</div><p>«${quote}»</p><footer>${name}<span>Демонстрационный отзыв</span></footer></blockquote>`).join('')}</div></section></div>`;
@@ -2536,6 +2542,38 @@ window.addEventListener('storage', event => {
         $('order-result').hidden = true; updateCart();
     } catch { /* Повреждённые значения из другой вкладки пропускаем. */ }
 });
+// Векторные знаки вымышленных ресторанов: не требуют загрузки изображений.
+const restaurantBrands = {
+    'pizza-house': {color:'#9b3025', background:'#f7e6d5', label:'Итальянская кухня', lines:['ПИЦЦА', 'ХАУС'], icon:'<circle cx="48" cy="48" r="35"/><path d="m30 66 18-43 20 43Z"/><path d="M30 66q19-9 38 0"/><circle cx="47" cy="40" r="3"/><circle cx="42" cy="53" r="3"/><circle cx="56" cy="55" r="3"/>'},
+    'sushi-time': {color:'#173d38', background:'#e1eeea', label:'Японская кухня', lines:['СУШИ', 'ТАЙМ'], icon:'<circle cx="48" cy="48" r="35"/><path d="M25 52q23-24 46 0v9H25Z"/><path d="M28 45q20-19 40 0M39 34l-4 10m17-14-4 10m17-6-4 10"/><path d="M43 47v14h10V47"/>'},
+    'burger-bro': {color:'#7b341b', background:'#ffe8b8', label:'Бургеры с характером', lines:['БУРГЕР', 'БРО'], icon:'<path d="M20 42a28 28 0 0 1 56 0Z"/><path d="M20 52h56M20 62h56M23 72h50q0 10-25 10T23 72Z"/><path d="m26 53 10 8 12-8 12 8 10-8M36 27h1m10-5h1m10 5h1"/>'},
+    'wok-street': {color:'#82391e', background:'#f8ddc8', label:'Азия на твоей улице', lines:['ВОК', 'СТРИТ'], icon:'<path d="M18 49h60q-5 28-30 28T18 49Zm19 30v5h22v-5M32 40l-9-24m24 24L57 9m-2 31L75 14"/><path d="M34 31q-5-7 1-12m11 13q-5-8 1-13"/>'},
+    'khinkali': {color:'#583044', background:'#efe0e7', label:'С грузинским теплом', lines:['ХИНКАЛИ', '& ХАЧАПУРИ'], icon:'<path d="m13 49 20-30 17 23 14-18 19 25M24 65q0-10 14-20l10-10 10 10q14 10 14 20-24 19-48 0Z"/><path d="m39 47 3 23m6-28v31m9-26-3 23M42 35h12l-2-8h-8Z"/>'},
+    'grill-master': {color:'#f1d3a8', background:'#2b3330', label:'Огонь. Дым. Вкус.', lines:['ГРИЛЬ', 'МАСТЕР'], icon:'<path d="M50 12q4 19 17 28c22 22 4 44-19 44S8 62 28 39q-1 18 9 18c-3-21 15-28 13-45Z"/><path d="M46 56q-17 18 2 23 19-5 2-23M27 91h42"/>'}
+};
+
+function restaurantLogo(r, hero = false) {
+    const brand = restaurantBrands[r.id];
+    return `<div class="restaurant-brand-panel${hero ? ' restaurant-brand-hero' : ''}" style="--brand-color:${brand.color};--brand-background:${brand.background}"><div class="brand-lockup"><svg class="brand-symbol" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${brand.icon}</svg><div class="brand-wordmark">${brand.lines.map(line=>`<span>${line}</span>`).join('')}</div><span class="brand-caption">${brand.label}</span></div></div>`;
+}
+
+// Содержимое обеих групп одинаково; их ширина всегда больше видимой ленты.
+function startPromoTicker() {
+    const ticker = $('promo-ticker');
+    const track = ticker.querySelector('.promo-track');
+    const groups = [...track.querySelectorAll('.promo-group')];
+    function fit() {
+        while (groups[0].getBoundingClientRect().width < ticker.clientWidth + 200) {
+            groups.forEach(group => group.append(group.firstElementChild.cloneNode(true)));
+        }
+        track.style.setProperty('--promo-duration', `${groups[0].getBoundingClientRect().width / 32}s`);
+        ticker.classList.add('is-ready');
+    }
+    document.fonts.ready.then(fit);
+    window.addEventListener('resize', fit, {passive:true});
+}
+startPromoTicker();
+
 $('year').textContent = new Date().getFullYear();
 $('hero-food').src = imageAssets.pizza;
 updateCart(); route();
@@ -2573,15 +2611,6 @@ window.addEventListener('storage', event => {
 });
 applyTheme(themePreference || (systemTheme.matches ? 'dark' : 'light'));
 
-// Кнопка паузы доступна с клавиатуры, наведение также приостанавливает ленту.
-$('ticker-toggle').addEventListener('click', () => {
-    const paused = $('promo-ticker').dataset.paused !== 'true';
-    $('promo-ticker').dataset.paused = String(paused);
-    $('ticker-toggle').setAttribute('aria-pressed', String(paused));
-    const action = paused ? 'Продолжить рекламную ленту' : 'Приостановить рекламную ленту';
-    $('ticker-toggle').setAttribute('aria-label', action);
-    $('ticker-toggle').title = action;
-});
 
     </script>
 </body>

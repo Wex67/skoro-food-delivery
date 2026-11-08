@@ -1662,10 +1662,23 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
     
+/* Заметная подпись для демонстрации автоматической публикации. */
+.hero h1 .ci-update {
+    display: block;
+    margin-top: 20px;
+    color: var(--ink);
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    text-decoration: underline;
+    text-decoration-color: var(--red);
+    text-underline-offset: 6px;
+}
+
 /* Мягкое голубое выделение текста в светлой и тёмной теме. */
 ::selection {
     background-color: rgba(125, 211, 252, 0.4);
     color: inherit;
 }
 
-    

@@ -43,16 +43,16 @@
 1. Склонируйте репозиторий:
 
    ```bash
-   git clone https://github.com/USERNAME/REPOSITORY.git
+   git clone https://github.com/Wex67/skoro-food-delivery.git
    ```
 
 2. Перейдите в папку проекта:
 
    ```bash
-   cd REPOSITORY
+   cd skoro-food-delivery
    ```
 
-3. Откройте файл `index.html` в браузере.
+3. Откройте файл `index.html` в браузере. Файл `style.css` должен находиться рядом с ним.
 
 Для удобной разработки рекомендуется использовать расширение **Live Server** в Visual Studio Code.
 
